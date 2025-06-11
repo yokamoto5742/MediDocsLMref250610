@@ -33,7 +33,7 @@ DOCUMENT_TYPES = ["診療情報提供書", "他院への紹介", "返書"]
 DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書", "他院への紹介", "返書"]
 
 DEPARTMENT_DOCTORS_MAPPING = {
-    "default": ["default"],
+    "default": ["default","医師共通"],
     "眼科": ["default", "橋本義弘", "植田芳樹"],
     "整形外科": ["default", "駒井理", "太田悟"],
 }
