@@ -26,12 +26,14 @@ TAB_NAMES = {
 DEFAULT_SECTION_NAMES = ["治療経過", "特記事項", "備考"]
 
 APP_TYPE = "referral_letter"
-DEFAULT_DEPARTMENT = ["default"]
+DEFAULT_DEPARTMENT = ["default","眼科","整形外科"]
 DEFAULT_DOCTOR = ["default"]
 DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
-DOCUMENT_TYPES = ["診療情報提供書"]
-DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書"]
+DOCUMENT_TYPES = ["診療情報提供書", "他院への紹介", "返書"]
+DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書", "他院への紹介", "返書"]
 
 DEPARTMENT_DOCTORS_MAPPING = {
     "default": ["default"],
+    "眼科": ["default", "橋本義弘", "植田芳樹"],
+    "整形外科": ["default", "駒井理", "太田悟"],
 }
