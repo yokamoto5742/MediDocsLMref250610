@@ -2,7 +2,7 @@ import streamlit as st
 
 from database.db import DatabaseManager
 from utils.config import CLAUDE_API_KEY, GEMINI_CREDENTIALS, GEMINI_FLASH_MODEL, GEMINI_MODEL, OPENAI_API_KEY
-from utils.constants import DEFAULT_DEPARTMENT, DOCUMENT_TYPES, DEPARTMENT_DOCTORS_MAPPING, DEFAULT_DOCUMENT_TYPE
+from utils.constants import DEFAULT_DEPARTMENT, DOCUMENT_TYPES, DEPARTMENT_DOCTORS_MAPPING, DEFAULT_DOCUMENT_TYPE, APP_TYPE
 from utils.prompt_manager import get_prompt
 
 
@@ -161,34 +161,21 @@ def save_user_settings(department, model, doctor="default", document_type=DEFAUL
         if department != "default" and department not in DEFAULT_DEPARTMENT:
             department = "default"
         db_manager = DatabaseManager.get_instance()
-
-        check_query = """
-                      SELECT * \
-                      FROM app_settings
-                      WHERE setting_id = 'user_preferences' \
-                        AND app_type = :app_type \
-                      """
-        existing = db_manager.execute_query(check_query, {"app_type": APP_TYPE})
-
-        if existing:
-            query = """
-                    UPDATE app_settings
-                    SET selected_department    = :department,
-                        selected_model         = :model,
-                        selected_document_type = :document_type,
-                        selected_doctor        = :doctor,
-                        updated_at             = CURRENT_TIMESTAMP
-                    WHERE setting_id = 'user_preferences' \
-                      AND app_type = :app_type \
-                    """
-        else:
-            query = """
-                    INSERT INTO app_settings
-                    (setting_id, app_type, selected_department, selected_model,
-                     selected_document_type, selected_doctor, updated_at)
-                    VALUES ('user_preferences', :app_type, :department, :model,
-                            :document_type, :doctor, CURRENT_TIMESTAMP) \
-                    """
+        query = """
+                INSERT INTO app_settings
+                (setting_id, app_type, selected_department, selected_model,
+                 selected_document_type, selected_doctor, updated_at)
+                VALUES ('user_preferences', :app_type, :department, :model,
+                        :document_type, :doctor, CURRENT_TIMESTAMP)
+                ON CONFLICT (setting_id) 
+                DO UPDATE SET 
+                    app_type = EXCLUDED.app_type,
+                    selected_department = EXCLUDED.selected_department,
+                    selected_model = EXCLUDED.selected_model,
+                    selected_document_type = EXCLUDED.selected_document_type,
+                    selected_doctor = EXCLUDED.selected_doctor,
+                    updated_at = CURRENT_TIMESTAMP
+                """
 
         db_manager.execute_query(query, {
             "app_type": APP_TYPE,
@@ -199,7 +186,36 @@ def save_user_settings(department, model, doctor="default", document_type=DEFAUL
         }, fetch=False)
 
     except Exception as e:
-        print(f"設定の保存に失敗しました: {str(e)}")
+        if "unique constraint" in str(e).lower() and "setting_id" in str(e).lower():
+            try:
+                query = """
+                        INSERT INTO app_settings
+                        (setting_id, app_type, selected_department, selected_model,
+                         selected_document_type, selected_doctor, updated_at)
+                        VALUES ('user_preferences', :app_type, :department, :model,
+                                :document_type, :doctor, CURRENT_TIMESTAMP)
+                        ON CONFLICT (setting_id) 
+                        DO UPDATE SET 
+                            app_type = EXCLUDED.app_type,
+                            selected_department = EXCLUDED.selected_department,
+                            selected_model = EXCLUDED.selected_model,
+                            selected_document_type = EXCLUDED.selected_document_type,
+                            selected_doctor = EXCLUDED.selected_doctor,
+                            updated_at = CURRENT_TIMESTAMP
+                        """
+
+                db_manager.execute_query(query, {
+                    "app_type": APP_TYPE,
+                    "department": department,
+                    "model": model,
+                    "document_type": document_type,
+                    "doctor": doctor
+                }, fetch=False)
+
+            except Exception as e2:
+                print(f"設定の保存に失敗しました: {str(e2)}")
+        else:
+            print(f"設定の保存に失敗しました: {str(e)}")
 
 
 def load_user_settings():

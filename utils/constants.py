@@ -25,7 +25,7 @@ TAB_NAMES = {
 
 DEFAULT_SECTION_NAMES = ["治療経過", "特記事項", "備考"]
 
-APP_TYPE = "opinion_letter"
+APP_TYPE = "referral_letter"
 DEFAULT_DEPARTMENT = ["default"]
 DEFAULT_DOCTOR = ["default"]
 DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
