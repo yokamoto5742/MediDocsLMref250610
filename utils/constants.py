@@ -28,9 +28,9 @@ DEFAULT_SECTION_NAMES = ["治療経過", "特記事項", "備考"]
 APP_TYPE = "opinion_letter"
 DEFAULT_DEPARTMENT = ["default"]
 DEFAULT_DOCTOR = ["default"]
-DEFAULT_DOCUMENT_TYPE = "主治医意見書"
-DOCUMENT_TYPES = ["主治医意見書", "訪問看護指示書"]
-DOCUMENT_TYPE_OPTIONS = ["すべて", "主治医意見書", "訪問看護指示書"]
+DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
+DOCUMENT_TYPES = ["診療情報提供書"]
+DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書"]
 
 DEPARTMENT_DOCTORS_MAPPING = {
     "default": ["default"],

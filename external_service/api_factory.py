@@ -39,7 +39,7 @@ class APIFactory:
                                      medical_text: str, 
                                      additional_info: str = "", 
                                      department: str = "default", 
-                                     document_type: str = "主治医意見書",
+                                     document_type: str = "診療情報提供書",
                                      doctor: str = "default", 
                                      model_name: str = None):
         client = APIFactory.create_client(provider)
