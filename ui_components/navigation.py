@@ -161,23 +161,28 @@ def save_user_settings(department, model, doctor="default", document_type=DEFAUL
         if department != "default" and department not in DEFAULT_DEPARTMENT:
             department = "default"
         db_manager = DatabaseManager.get_instance()
+
+        # アプリタイプごとに異なるsetting_idを使用
+        setting_id = f"user_preferences_{APP_TYPE}"
+
         query = """
                 INSERT INTO app_settings
                 (setting_id, app_type, selected_department, selected_model,
                  selected_document_type, selected_doctor, updated_at)
-                VALUES ('user_preferences', :app_type, :department, :model,
-                        :document_type, :doctor, CURRENT_TIMESTAMP)
-                ON CONFLICT (setting_id) 
-                DO UPDATE SET 
-                    app_type = EXCLUDED.app_type,
-                    selected_department = EXCLUDED.selected_department,
-                    selected_model = EXCLUDED.selected_model,
-                    selected_document_type = EXCLUDED.selected_document_type,
-                    selected_doctor = EXCLUDED.selected_doctor,
+                VALUES (:setting_id, :app_type, :department, :model,
+                        :document_type, :doctor, CURRENT_TIMESTAMP) ON CONFLICT (setting_id) 
+                DO \
+                UPDATE SET
+                    app_type = EXCLUDED.app_type, \
+                    selected_department = EXCLUDED.selected_department, \
+                    selected_model = EXCLUDED.selected_model, \
+                    selected_document_type = EXCLUDED.selected_document_type, \
+                    selected_doctor = EXCLUDED.selected_doctor, \
                     updated_at = CURRENT_TIMESTAMP
                 """
 
         db_manager.execute_query(query, {
+            "setting_id": setting_id,
             "app_type": APP_TYPE,
             "department": department,
             "model": model,
@@ -186,36 +191,7 @@ def save_user_settings(department, model, doctor="default", document_type=DEFAUL
         }, fetch=False)
 
     except Exception as e:
-        if "unique constraint" in str(e).lower() and "setting_id" in str(e).lower():
-            try:
-                query = """
-                        INSERT INTO app_settings
-                        (setting_id, app_type, selected_department, selected_model,
-                         selected_document_type, selected_doctor, updated_at)
-                        VALUES ('user_preferences', :app_type, :department, :model,
-                                :document_type, :doctor, CURRENT_TIMESTAMP)
-                        ON CONFLICT (setting_id) 
-                        DO UPDATE SET 
-                            app_type = EXCLUDED.app_type,
-                            selected_department = EXCLUDED.selected_department,
-                            selected_model = EXCLUDED.selected_model,
-                            selected_document_type = EXCLUDED.selected_document_type,
-                            selected_doctor = EXCLUDED.selected_doctor,
-                            updated_at = CURRENT_TIMESTAMP
-                        """
-
-                db_manager.execute_query(query, {
-                    "app_type": APP_TYPE,
-                    "department": department,
-                    "model": model,
-                    "document_type": document_type,
-                    "doctor": doctor
-                }, fetch=False)
-
-            except Exception as e2:
-                print(f"設定の保存に失敗しました: {str(e2)}")
-        else:
-            print(f"設定の保存に失敗しました: {str(e)}")
+        print(f"設定の保存に失敗しました: {str(e)}")
 
 
 def load_user_settings():
@@ -223,13 +199,16 @@ def load_user_settings():
         from utils.constants import APP_TYPE
 
         db_manager = DatabaseManager.get_instance()
+
+        # アプリタイプごとに異なるsetting_idを使用
+        setting_id = f"user_preferences_{APP_TYPE}"
+
         query = """
                 SELECT selected_department, selected_model, selected_document_type, selected_doctor
                 FROM app_settings
-                WHERE setting_id = 'user_preferences' \
-                  AND app_type = :app_type \
+                WHERE setting_id = :setting_id
                 """
-        settings = db_manager.execute_query(query, {"app_type": APP_TYPE})
+        settings = db_manager.execute_query(query, {"setting_id": setting_id})
 
         if settings:
             return (settings[0]["selected_department"],
