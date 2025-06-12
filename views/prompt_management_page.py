@@ -4,6 +4,7 @@ from utils.constants import DEPARTMENT_DOCTORS_MAPPING, DOCUMENT_TYPES, DEFAULT_
 from utils.error_handlers import handle_error
 from utils.exceptions import AppError
 from utils.prompt_manager import get_all_departments, get_prompt, create_or_update_prompt, delete_prompt
+from utils.config import get_config
 from ui_components.navigation import change_page
 
 
@@ -25,6 +26,9 @@ def update_document_type():
 
 @handle_error
 def prompt_management_ui():
+    config = get_config()
+    default_prompt_content = config['PROMPTS']['summary']
+
     if st.session_state.success_message:
         st.success(st.session_state.success_message)
         st.session_state.success_message = None
@@ -125,9 +129,14 @@ def prompt_management_ui():
     st.session_state.document_model_mapping[selected_doc_type] = prompt_model
 
     with st.form(key=f"edit_prompt_form_{selected_dept}_{selected_doc_type}_{selected_doctor}"):
+        if prompt_data:
+            content_value = prompt_data.get("content", "")
+        else:
+            content_value = default_prompt_content.replace('\\n', '\n')
+
         prompt_content = st.text_area(
             "プロンプト内容",
-            value=prompt_data.get("content", "") if prompt_data else "",
+            value=content_value,
             height=200,
             key=f"prompt_content_{selected_dept}_{selected_doc_type}_{selected_doctor}"
         )
