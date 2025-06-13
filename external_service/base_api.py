@@ -21,7 +21,7 @@ class BaseAPIClient(ABC):
         pass
     
     def create_summary_prompt(self, medical_text: str, additional_info: str = "", 
-                            department: str = "default", document_type: str = "診療情報提供書", 
+                            department: str = "default", document_type: str = DEFAULT_DOCUMENT_TYPE,
                             doctor: str = "default") -> str:
         prompt_data = get_prompt(department, document_type, doctor)
 

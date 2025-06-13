@@ -189,7 +189,7 @@ def insert_document(collection, document):
                     """
             params = {
                 "department": document["department"],
-                "document_type": document.get("document_type", "診療情報提供書"),
+                "document_type": document.get("document_type"),
                 "doctor": document["doctor"],
                 "content": document["content"],
                 "selected_model": document.get("selected_model"),
