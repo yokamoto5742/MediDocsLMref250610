@@ -24,6 +24,7 @@ JST = pytz.timezone('Asia/Tokyo')
 
 def generate_summary_task(input_text: str, selected_department: str, selected_model: str,
                           result_queue: queue.Queue, additional_info: str = "",
+                          referral_purpose: str = "", current_prescription: str = "",  # 新しいパラメータを追加
                           selected_document_type: str = DEFAULT_DOCUMENT_TYPE,
                           selected_doctor: str = "default",
                           model_explicitly_selected: bool = False) -> None:
@@ -44,6 +45,8 @@ def generate_summary_task(input_text: str, selected_department: str, selected_mo
             provider=provider,
             medical_text=input_text,
             additional_info=additional_info,
+            referral_purpose=referral_purpose,
+            current_prescription=current_prescription,
             department=normalized_dept,
             document_type=normalized_doc_type,
             doctor=selected_doctor,
@@ -75,7 +78,9 @@ def generate_summary_task(input_text: str, selected_department: str, selected_mo
 
 
 @handle_error
-def process_summary(input_text: str, additional_info: str = "") -> None:
+@handle_error
+def process_summary(input_text: str, additional_info: str = "",
+                   referral_purpose: str = "", current_prescription: str = "") -> None:  # 新しいパラメータを追加
     validate_api_credentials()
     validate_input_text(input_text)
 
@@ -83,7 +88,7 @@ def process_summary(input_text: str, additional_info: str = "") -> None:
         session_params = get_session_parameters()
 
         result = execute_summary_generation_with_ui(
-            input_text, additional_info, session_params
+            input_text, additional_info, referral_purpose, current_prescription, session_params
         )
 
         if result["success"]:
@@ -127,6 +132,7 @@ def get_session_parameters() -> Dict[str, Any]:
 
 
 def execute_summary_generation_with_ui(input_text: str, additional_info: str,
+                                       referral_purpose: str, current_prescription: str,  # 新しいパラメータを追加
                                        session_params: Dict[str, Any]) -> Dict[str, Any]:
     start_time = datetime.datetime.now()
     status_placeholder = st.empty()
@@ -140,6 +146,8 @@ def execute_summary_generation_with_ui(input_text: str, additional_info: str,
             session_params["selected_model"],
             result_queue,
             additional_info,
+            referral_purpose,
+            current_prescription,
             session_params["selected_document_type"],
             session_params["selected_doctor"],
             session_params["model_explicitly_selected"]

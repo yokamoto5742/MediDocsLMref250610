@@ -8,7 +8,9 @@ from ui_components.navigation import render_sidebar
 
 def clear_inputs():
     st.session_state.input_text = ""
-    st.session_state.additional_info = "【前回の記載】\n(ここに貼り付け)"
+    st.session_state.referral_purpose = ""
+    st.session_state.current_prescription = ""
+    st.session_state.additional_info = ""
     st.session_state.output_summary = ""
     st.session_state.parsed_summary = {}
     st.session_state.summary_generation_time = None
@@ -23,19 +25,31 @@ def render_input_section():
     if "clear_input" not in st.session_state:
         st.session_state.clear_input = False
 
-    if "additional_info" not in st.session_state:
-        st.session_state.additional_info = "【前回の記載】\n(ここに貼り付け)"
-
     input_text = st.text_area(
-        "カルテ記載入力",
-        height=100,
+        "カルテ記載",
+        height=70,
         placeholder="ここを右クリックしてテキストを貼り付けてください...",
         key="input_text"
     )
 
+    referral_purpose = st.text_area(
+        "紹介目的",
+        height=70,
+        placeholder="紹介の目的を入力してください...",
+        key="referral_purpose"
+    )
+
+    current_prescription = st.text_area(
+        "現在の処方",
+        height=70,
+        placeholder="現在の処方を入力してください...",
+        key="current_prescription"
+    )
+
     additional_info = st.text_area(
-        "追加情報入力",
-        height=100,
+        "追加情報",
+        height=70,
+        placeholder="追加情報を入力してください...",
         key="additional_info"
     )
 
@@ -43,7 +57,7 @@ def render_input_section():
 
     with col1:
         if st.button("作成", type="primary"):
-            process_summary(input_text, additional_info)
+            process_summary(input_text, additional_info, referral_purpose, current_prescription)
 
     with col2:
         if st.button("テキストをクリア", on_click=clear_inputs):
