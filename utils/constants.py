@@ -31,7 +31,7 @@ TAB_NAMES = {
     "NOTE": "備考"
 }
 
-DEFAULT_SECTION_NAMES = ["主病名", "紹介目的", "既往歴", "症状経過", "治療経過", "現在の処方", "備考"]
+DEFAULT_SECTION_NAMES = ["【主病名】", "【紹介目的】", "【既往歴】", "【症状経過】", "【治療経過】", "【現在の処方】", "【備考】"]
 
 DEFAULT_DEPARTMENT = ["default","眼科","整形外科"]
 DEFAULT_DOCTOR = ["default"]

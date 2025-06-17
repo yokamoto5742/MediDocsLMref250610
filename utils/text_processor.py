@@ -3,10 +3,8 @@ from utils.constants import DEFAULT_SECTION_NAMES
 section_aliases = {
     "治療内容": "治療経過",
     "病名": "主病名",
-    "診断": "主病名",
     "紹介理由": "紹介目的",
     "症状": "症状経過",
-    "経過": "症状経過",
     "処方": "現在の処方",
     "薬剤": "現在の処方",
     "その他": "備考",
@@ -19,8 +17,8 @@ def format_output_summary(summary_text):
     processed_text = (
         summary_text.replace('*', '')
         .replace('＊', '')
-        .replace('#', '')
-        .replace(' ', '')
+        # .replace('#', '')
+        # .replace(' ', '')
     )
 
     return processed_text
