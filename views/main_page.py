@@ -35,14 +35,14 @@ def render_input_section():
     referral_purpose = st.text_area(
         "紹介目的",
         height=70,
-        placeholder="紹介の目的を入力してください...",
+        placeholder="紹介目的を入力してください...",
         key="referral_purpose"
     )
 
     current_prescription = st.text_area(
         "現在の処方",
         height=70,
-        placeholder="現在の処方を入力してください...",
+        placeholder="処方内容を入力してください...",
         key="current_prescription"
     )
 
