@@ -42,7 +42,7 @@ DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書", "他院への紹�
 DOCUMENT_TYPE_TO_PURPOSE_MAPPING = {
     "診療情報提供書": "精査加療",
     "他院への紹介": "継続治療依頼",
-    "返書": ""
+    "返書": "受診報告"
 }
 
 DEPARTMENT_DOCTORS_MAPPING = {

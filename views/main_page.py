@@ -23,27 +23,9 @@ def clear_inputs():
             st.session_state[key] = ""
 
 
-def update_referral_purpose():
-    selected_doc_type = st.session_state.document_type_selector_main
-    default_purpose = DOCUMENT_TYPE_TO_PURPOSE_MAPPING.get(selected_doc_type, "")
-    st.session_state.referral_purpose = default_purpose
-
-
 def render_input_section():
     if "clear_input" not in st.session_state:
         st.session_state.clear_input = False
-
-    if "selected_document_type" not in st.session_state:
-        st.session_state.selected_document_type = DOCUMENT_TYPES[0]
-
-    selected_document_type = st.selectbox(
-        "文書種類",
-        DOCUMENT_TYPES,
-        index=DOCUMENT_TYPES.index(st.session_state.selected_document_type),
-        key="document_type_selector_main",
-        on_change=update_referral_purpose
-    )
-    st.session_state.selected_document_type = selected_document_type
 
     input_text = st.text_area(
         "カルテ記載",
@@ -51,9 +33,6 @@ def render_input_section():
         placeholder="ここを右クリックしてテキストを貼り付けてください...",
         key="input_text"
     )
-
-    if "referral_purpose" not in st.session_state:
-        st.session_state.referral_purpose = DOCUMENT_TYPE_TO_PURPOSE_MAPPING.get(selected_document_type, "")
 
     referral_purpose = st.text_area(
         "紹介目的",
@@ -64,14 +43,14 @@ def render_input_section():
     current_prescription = st.text_area(
         "現在の処方",
         height=70,
-        placeholder="処方内容を入力してください...",
+        placeholder="現在の処方内容を入力してください...",
         key="current_prescription"
     )
 
     additional_info = st.text_area(
         "追加情報",
         height=70,
-        placeholder="追加情報を入力してください...",
+        placeholder="追加情報があれば入力してください...",
         key="additional_info"
     )
 
