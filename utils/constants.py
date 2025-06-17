@@ -36,12 +36,12 @@ DEFAULT_SECTION_NAMES = ["【主病名】", "【紹介目的】", "【既往歴�
 DEFAULT_DEPARTMENT = ["default","眼科","整形外科"]
 DEFAULT_DOCTOR = ["default"]
 DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
-DOCUMENT_TYPES = ["診療情報提供書", "他院への紹介", "返書"]
-DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書", "他院への紹介", "返書"]
+DOCUMENT_TYPES = ["診療情報提供書", "他院へ紹介", "返書"]
+DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書", "他院へ紹介", "返書"]
 
 DOCUMENT_TYPE_TO_PURPOSE_MAPPING = {
     "診療情報提供書": "精査加療",
-    "他院への紹介": "継続治療依頼",
+    "他院へ紹介": "継続治療依頼",
     "返書": "受診報告"
 }
 
