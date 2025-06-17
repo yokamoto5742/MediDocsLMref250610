@@ -54,7 +54,15 @@ def render_summary_results():
     if st.session_state.output_summary:
         if st.session_state.parsed_summary:
             tabs = st.tabs([
-                TAB_NAMES["ALL"], TAB_NAMES["TREATMENT"], TAB_NAMES["SPECIAL"], TAB_NAMES["NOTE"]])
+                TAB_NAMES["ALL"],
+                TAB_NAMES["MAIN_DISEASE"],
+                TAB_NAMES["PURPOSE"],
+                TAB_NAMES["HISTORY"],
+                TAB_NAMES["SYMPTOMS"],
+                TAB_NAMES["TREATMENT"],
+                TAB_NAMES["PRESCRIPTION"],
+                TAB_NAMES["NOTE"]
+            ])
 
             with tabs[0]:
                 st.code(st.session_state.output_summary,
@@ -62,7 +70,15 @@ def render_summary_results():
                         height=150
                         )
 
-            sections = [TAB_NAMES["TREATMENT"], TAB_NAMES["SPECIAL"], TAB_NAMES["NOTE"]]
+            sections = [
+                TAB_NAMES["MAIN_DISEASE"],
+                TAB_NAMES["PURPOSE"],
+                TAB_NAMES["HISTORY"],
+                TAB_NAMES["SYMPTOMS"],
+                TAB_NAMES["TREATMENT"],
+                TAB_NAMES["PRESCRIPTION"],
+                TAB_NAMES["NOTE"]
+            ]
             for i, section in enumerate(sections, 1):
                 with tabs[i]:
                     section_content = st.session_state.parsed_summary.get(section, "")

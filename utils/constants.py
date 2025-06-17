@@ -22,12 +22,16 @@ MESSAGES = {
 
 TAB_NAMES = {
     "ALL": "全文",
+    "MAIN_DISEASE": "主病名",
+    "PURPOSE": "紹介目的",
+    "HISTORY": "既往歴",
+    "SYMPTOMS": "症状経過",
     "TREATMENT": "治療経過",
-    "SPECIAL": "特記事項",
+    "PRESCRIPTION": "現在の処方",
     "NOTE": "備考"
 }
 
-DEFAULT_SECTION_NAMES = ["治療経過", "特記事項", "備考"]
+DEFAULT_SECTION_NAMES = ["主病名", "紹介目的", "既往歴", "症状経過", "治療経過", "現在の処方", "備考"]
 
 DEFAULT_DEPARTMENT = ["default","眼科","整形外科"]
 DEFAULT_DOCTOR = ["default"]
