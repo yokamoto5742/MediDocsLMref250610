@@ -27,13 +27,6 @@ def render_input_section():
     if "clear_input" not in st.session_state:
         st.session_state.clear_input = False
 
-    input_text = st.text_area(
-        "カルテ記載",
-        height=70,
-        placeholder="ここを右クリックしてテキストを貼り付けてください...",
-        key="input_text"
-    )
-
     referral_purpose = st.text_area(
         "紹介目的",
         height=70,
@@ -45,6 +38,13 @@ def render_input_section():
         height=70,
         placeholder="現在の処方内容を入力してください...",
         key="current_prescription"
+    )
+
+    input_text = st.text_area(
+        "カルテ記載",
+        height=70,
+        placeholder="ここを右クリックしてテキストを貼り付けてください...",
+        key="input_text"
     )
 
     additional_info = st.text_area(
