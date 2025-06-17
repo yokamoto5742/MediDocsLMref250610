@@ -2,7 +2,8 @@ import streamlit as st
 
 from database.db import DatabaseManager
 from utils.config import CLAUDE_API_KEY, GEMINI_CREDENTIALS, GEMINI_FLASH_MODEL, GEMINI_MODEL, OPENAI_API_KEY
-from utils.constants import DEFAULT_DEPARTMENT, DOCUMENT_TYPES, DEPARTMENT_DOCTORS_MAPPING, DEFAULT_DOCUMENT_TYPE
+from utils.constants import DEFAULT_DEPARTMENT, DOCUMENT_TYPES, DEPARTMENT_DOCTORS_MAPPING, DEFAULT_DOCUMENT_TYPE, \
+    DOCUMENT_TYPE_TO_PURPOSE_MAPPING
 from utils.prompt_manager import get_prompt
 
 
@@ -17,6 +18,9 @@ def update_document_model():
 
     st.session_state.selected_document_type = new_doc_type
     st.session_state.model_explicitly_selected = False
+
+    default_purpose = DOCUMENT_TYPE_TO_PURPOSE_MAPPING.get(new_doc_type, "")
+    st.session_state.referral_purpose = default_purpose
 
     prompt_data = get_prompt(selected_dept, new_doc_type, selected_doctor)
     if prompt_data and prompt_data.get("selected_model") in st.session_state.available_models:
@@ -87,6 +91,10 @@ def render_sidebar():
 
     if "selected_document_type" not in st.session_state:
         st.session_state.selected_document_type = document_types[0] if document_types else DEFAULT_DOCUMENT_TYPE
+        if "referral_purpose" not in st.session_state:
+            st.session_state.referral_purpose = DOCUMENT_TYPE_TO_PURPOSE_MAPPING.get(
+                st.session_state.selected_document_type, "")
+
     if len(document_types) > 1:
         selected_document_type = st.sidebar.selectbox(
             "文書名",

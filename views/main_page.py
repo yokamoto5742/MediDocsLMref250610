@@ -1,14 +1,13 @@
 import streamlit as st
 
 from services.summary_service import process_summary
-from utils.constants import MESSAGES, TAB_NAMES
+from utils.constants import MESSAGES, TAB_NAMES, DOCUMENT_TYPES, DOCUMENT_TYPE_TO_PURPOSE_MAPPING
 from utils.error_handlers import handle_error
 from ui_components.navigation import render_sidebar
 
 
 def clear_inputs():
     st.session_state.input_text = ""
-    st.session_state.referral_purpose = ""
     st.session_state.current_prescription = ""
     st.session_state.additional_info = ""
     st.session_state.output_summary = ""
@@ -16,14 +15,35 @@ def clear_inputs():
     st.session_state.summary_generation_time = None
     st.session_state.clear_input = True
 
+    st.session_state.selected_document_type = DOCUMENT_TYPES[0]
+    st.session_state.referral_purpose = DOCUMENT_TYPE_TO_PURPOSE_MAPPING.get(DOCUMENT_TYPES[0], "")
+
     for key in list(st.session_state.keys()):
         if key.startswith("input_text"):
             st.session_state[key] = ""
 
 
+def update_referral_purpose():
+    selected_doc_type = st.session_state.document_type_selector_main
+    default_purpose = DOCUMENT_TYPE_TO_PURPOSE_MAPPING.get(selected_doc_type, "")
+    st.session_state.referral_purpose = default_purpose
+
+
 def render_input_section():
     if "clear_input" not in st.session_state:
         st.session_state.clear_input = False
+
+    if "selected_document_type" not in st.session_state:
+        st.session_state.selected_document_type = DOCUMENT_TYPES[0]
+
+    selected_document_type = st.selectbox(
+        "文書種類",
+        DOCUMENT_TYPES,
+        index=DOCUMENT_TYPES.index(st.session_state.selected_document_type),
+        key="document_type_selector_main",
+        on_change=update_referral_purpose
+    )
+    st.session_state.selected_document_type = selected_document_type
 
     input_text = st.text_area(
         "カルテ記載",
@@ -32,10 +52,12 @@ def render_input_section():
         key="input_text"
     )
 
+    if "referral_purpose" not in st.session_state:
+        st.session_state.referral_purpose = DOCUMENT_TYPE_TO_PURPOSE_MAPPING.get(selected_document_type, "")
+
     referral_purpose = st.text_area(
         "紹介目的",
         height=70,
-        placeholder="紹介目的を入力してください...",
         key="referral_purpose"
     )
 

@@ -39,6 +39,12 @@ DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
 DOCUMENT_TYPES = ["診療情報提供書", "他院への紹介", "返書"]
 DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書", "他院への紹介", "返書"]
 
+DOCUMENT_TYPE_TO_PURPOSE_MAPPING = {
+    "診療情報提供書": "精査加療",
+    "他院への紹介": "継続治療依頼",
+    "返書": ""
+}
+
 DEPARTMENT_DOCTORS_MAPPING = {
     "default": ["default","医師共通"],
     "眼科": ["default", "橋本義弘", "植田芳樹"],
