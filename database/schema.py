@@ -1,6 +1,4 @@
-import os
 import time
-from subprocess import run, PIPE
 
 from sqlalchemy import text
 
@@ -8,32 +6,23 @@ from database.db import DatabaseManager
 from utils.exceptions import DatabaseError
 
 
-def run_alembic_migrations():
-    try:
-        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-        result = run(
-            ["alembic", "upgrade", "head"],
-            cwd=root_dir,
-            stdout=PIPE,
-            stderr=PIPE,
-            text=True
-        )
-
-        if result.returncode != 0:
-            print(f"警告: マイグレーション実行中にエラーが発生しました: {result.stderr}")
-            return False
-
-        print("データベースマイグレーションが正常に完了しました。")
-        return True
-    except Exception as e:
-        print(f"マイグレーション実行中にエラーが発生しました: {str(e)}")
-        return False
-
-
 def create_tables():
     db_manager = DatabaseManager.get_instance()
     engine = db_manager.get_engine()
+
+    app_settings_table = """
+        CREATE TABLE IF NOT EXISTS app_settings (
+            id SERIAL PRIMARY KEY,
+            setting_id VARCHAR(100) NOT NULL,
+            app_type VARCHAR(50) NOT NULL,
+            selected_department VARCHAR(100),
+            selected_model VARCHAR(50),
+            selected_document_type VARCHAR(100),
+            selected_doctor VARCHAR(100),
+            updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            CONSTRAINT unique_setting_per_app UNIQUE (setting_id, app_type)
+        )
+    """
 
     prompts_table = """
         CREATE TABLE IF NOT EXISTS prompts (
@@ -63,20 +52,6 @@ def create_tables():
             output_tokens INTEGER,
             total_tokens INTEGER,
             processing_time INTEGER
-        )
-    """
-
-    app_settings_table = """
-        CREATE TABLE IF NOT EXISTS app_settings (
-            id SERIAL PRIMARY KEY,
-            setting_id VARCHAR(100) NOT NULL,
-            app_type VARCHAR(50) NOT NULL,
-            selected_department VARCHAR(100),
-            selected_model VARCHAR(50),
-            selected_document_type VARCHAR(100),
-            selected_doctor VARCHAR(100),
-            updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-            CONSTRAINT unique_setting_per_app UNIQUE (setting_id, app_type)
         )
     """
 
