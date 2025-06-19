@@ -11,18 +11,33 @@ class BaseAPIClient(ABC):
     def __init__(self, api_key: str, default_model: str):
         self.api_key = api_key
         self.default_model = default_model
-    
+
     @abstractmethod
     def initialize(self) -> bool:
-        pass
-    
-    @abstractmethod
-    def _generate_content(self, prompt: str, model_name: str) -> Tuple[str, int, int]:
+        """APIクライアントを初期化します。成功時はTrueを返し、失敗時は例外を投げます。"""
         pass
 
-    def create_summary_prompt(self, medical_text: str, additional_info: str = "",
-                              referral_purpose: str = "", current_prescription: str = "",
-                              department: str = "default", document_type: str = DEFAULT_DOCUMENT_TYPE,
+    @abstractmethod
+    def _generate_content(self, prompt: str, model_name: str) -> Tuple[str, int, int]:
+        """
+        プロンプトから要約を生成します。
+        Args:
+            prompt: 生成用プロンプト
+            model_name: 使用するモデル名
+        Returns:
+            Tuple[str, int, int]: (生成された要約, 入力トークン数, 出力トークン数)
+        Raises:
+            APIError: API呼び出しに失敗した場合
+        """
+        pass
+
+    def create_summary_prompt(self,
+                              medical_text: str,
+                              additional_info: str = "",
+                              referral_purpose: str = "",
+                              current_prescription: str = "",
+                              department: str = "default",
+                              document_type: str = DEFAULT_DOCUMENT_TYPE,
                               doctor: str = "default") -> str:
         prompt_data = get_prompt(department, document_type, doctor)
 
@@ -44,24 +59,39 @@ class BaseAPIClient(ABC):
 
         return prompt
     
-    def get_model_name(self, department: str, document_type: str, doctor: str) -> str:
-        """使用するモデル名を取得（共通メソッド）"""
+    def get_model_name(self,
+                       department: str,
+                       document_type: str,
+                       doctor: str) -> str:
         prompt_data = get_prompt(department, document_type, doctor)
+
         return prompt_data.get("selected_model") if prompt_data and prompt_data.get(
             "selected_model") else self.default_model
 
-    def generate_summary(self, medical_text: str, additional_info: str = "",
-                         referral_purpose: str = "", current_prescription: str = "",
-                         department: str = "default", document_type: str = DEFAULT_DOCUMENT_TYPE,
-                         doctor: str = "default", model_name: Optional[str] = None) -> Tuple[str, int, int]:
+    def generate_summary(self,
+                         medical_text: str,
+                         additional_info: str = "",
+                         referral_purpose: str = "",
+                         current_prescription: str = "",
+                         department: str = "default",
+                         document_type: str = DEFAULT_DOCUMENT_TYPE,
+                         doctor: str = "default",
+                         model_name: Optional[str] = None) -> Tuple[str, int, int]:
         try:
             self.initialize()
 
             if not model_name:
                 model_name = self.get_model_name(department, document_type, doctor)
 
-            prompt = self.create_summary_prompt(medical_text, additional_info, referral_purpose,
-                                                current_prescription, department, document_type, doctor)
+            prompt = self.create_summary_prompt(
+                medical_text,
+                additional_info,
+                referral_purpose,
+                current_prescription,
+                department,
+                document_type,
+                doctor
+            )
 
             return self._generate_content(prompt, model_name)
 
