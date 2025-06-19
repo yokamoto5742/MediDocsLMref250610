@@ -2,8 +2,7 @@ import streamlit as st
 
 from database.db import DatabaseManager
 from utils.config import CLAUDE_API_KEY, GEMINI_CREDENTIALS, GEMINI_FLASH_MODEL, GEMINI_MODEL, OPENAI_API_KEY
-from utils.constants import DEFAULT_DEPARTMENT, DOCUMENT_TYPES, DEPARTMENT_DOCTORS_MAPPING, DEFAULT_DOCUMENT_TYPE, \
-    DOCUMENT_TYPE_TO_PURPOSE_MAPPING
+from utils.constants import APP_TYPE, DEFAULT_DEPARTMENT, DOCUMENT_TYPES, DEPARTMENT_DOCTORS_MAPPING, DEFAULT_DOCUMENT_TYPE, DOCUMENT_TYPE_TO_PURPOSE_MAPPING
 from utils.prompt_manager import get_prompt
 
 
@@ -34,7 +33,6 @@ def update_document_model():
 
 def render_sidebar():
     departments = ["default"] + [dept for dept in DEFAULT_DEPARTMENT if dept != "default"]
-
     previous_dept = st.session_state.selected_department
     previous_model = getattr(st.session_state, "selected_model", None)
     previous_doctor = getattr(st.session_state, "selected_doctor", None)
@@ -162,30 +160,31 @@ def render_sidebar():
         st.rerun()
 
 
-def save_user_settings(department, model, doctor="default", document_type=DEFAULT_DOCUMENT_TYPE):
+def save_user_settings(department, model,
+                       doctor="default",
+                       document_type=DEFAULT_DOCUMENT_TYPE):
     try:
-        from utils.constants import APP_TYPE
-
         if department != "default" and department not in DEFAULT_DEPARTMENT:
             department = "default"
         db_manager = DatabaseManager.get_instance()
 
-        # アプリタイプごとに異なるsetting_idを使用
         setting_id = f"user_preferences_{APP_TYPE}"
 
         query = """
                 INSERT INTO app_settings
                 (setting_id, app_type, selected_department, selected_model,
                  selected_document_type, selected_doctor, updated_at)
-                VALUES (:setting_id, :app_type, :department, :model,
-                        :document_type, :doctor, CURRENT_TIMESTAMP) ON CONFLICT (setting_id) 
-                DO \
-                UPDATE SET
-                    app_type = EXCLUDED.app_type, \
-                    selected_department = EXCLUDED.selected_department, \
-                    selected_model = EXCLUDED.selected_model, \
-                    selected_document_type = EXCLUDED.selected_document_type, \
-                    selected_doctor = EXCLUDED.selected_doctor, \
+                VALUES (:setting_id, :app_type, 
+                        :department, :model,
+                        :document_type, :doctor, 
+                        CURRENT_TIMESTAMP) 
+                ON CONFLICT (setting_id) 
+                DO UPDATE SET
+                    app_type = EXCLUDED.app_type,
+                    selected_department = EXCLUDED.selected_department,
+                    selected_model = EXCLUDED.selected_model,
+                    selected_document_type = EXCLUDED.selected_document_type,
+                    selected_doctor = EXCLUDED.selected_doctor,
                     updated_at = CURRENT_TIMESTAMP
                 """
 
