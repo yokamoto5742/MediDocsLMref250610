@@ -25,7 +25,7 @@ class ClaudeAPIClient(BaseAPIClient):
     def _generate_content(self, prompt: str, model_name: str) -> Tuple[str, int, int]:
         response = self.client.messages.create(
             model=model_name,
-            max_tokens=5000, # 最大出力トークン数
+            max_tokens=6000, # 最大出力トークン数
             messages=[
                 {"role": "user", "content": prompt}
             ]

@@ -12,7 +12,7 @@ from external_service.api_factory import generate_summary
 from utils.config import (CLAUDE_API_KEY, CLAUDE_MODEL,
                           GEMINI_CREDENTIALS, GEMINI_FLASH_MODEL, GEMINI_MODEL,
                           MAX_INPUT_TOKENS, MIN_INPUT_TOKENS, OPENAI_API_KEY,
-                          OPENAI_MODEL, MAX_TOKEN_THRESHOLD)
+                          OPENAI_MODEL, MAX_CHARACTER_THRESHOLD)
 from utils.constants import APP_TYPE, MESSAGES, DEFAULT_DEPARTMENT, DEFAULT_DOCUMENT_TYPE,DOCUMENT_TYPES
 from utils.error_handlers import handle_error
 from utils.exceptions import APIError
@@ -22,9 +22,13 @@ from utils.text_processor import format_output_summary, parse_output_summary
 JST = pytz.timezone('Asia/Tokyo')
 
 
-def generate_summary_task(input_text: str, selected_department: str, selected_model: str,
-                          result_queue: queue.Queue, additional_info: str = "",
-                          referral_purpose: str = "", current_prescription: str = "",  # 新しいパラメータを追加
+def generate_summary_task(input_text: str,
+                          selected_department: str,
+                          selected_model: str,
+                          result_queue: queue.Queue,
+                          additional_info: str = "",
+                          referral_purpose: str = "",
+                          current_prescription: str = "",
                           selected_document_type: str = DEFAULT_DOCUMENT_TYPE,
                           selected_doctor: str = "default",
                           model_explicitly_selected: bool = False) -> None:
@@ -34,8 +38,13 @@ def generate_summary_task(input_text: str, selected_department: str, selected_mo
         )
 
         final_model, model_switched, original_model = determine_final_model(
-            normalized_dept, normalized_doc_type, selected_doctor,
-            selected_model, model_explicitly_selected, input_text, additional_info
+            normalized_dept,
+            normalized_doc_type,
+            selected_doctor,
+            selected_model,
+            model_explicitly_selected,
+            input_text,
+            additional_info
         )
 
         provider, model_name = get_provider_and_model(final_model)
@@ -78,9 +87,10 @@ def generate_summary_task(input_text: str, selected_department: str, selected_mo
 
 
 @handle_error
-@handle_error
-def process_summary(input_text: str, additional_info: str = "",
-                   referral_purpose: str = "", current_prescription: str = "") -> None:  # 新しいパラメータを追加
+def process_summary(input_text: str,
+                    additional_info: str = "",
+                    referral_purpose: str = "",
+                    current_prescription: str = "") -> None:
     validate_api_credentials()
     validate_input_text(input_text)
 
@@ -88,7 +98,11 @@ def process_summary(input_text: str, additional_info: str = "",
         session_params = get_session_parameters()
 
         result = execute_summary_generation_with_ui(
-            input_text, additional_info, referral_purpose, current_prescription, session_params
+            input_text,
+            additional_info,
+            referral_purpose,
+            current_prescription,
+            session_params
         )
 
         if result["success"]:
@@ -131,8 +145,10 @@ def get_session_parameters() -> Dict[str, Any]:
     }
 
 
-def execute_summary_generation_with_ui(input_text: str, additional_info: str,
-                                       referral_purpose: str, current_prescription: str,  # 新しいパラメータを追加
+def execute_summary_generation_with_ui(input_text: str,
+                                       additional_info: str,
+                                       referral_purpose: str,
+                                       current_prescription: str,
                                        session_params: Dict[str, Any]) -> Dict[str, Any]:
     start_time = datetime.datetime.now()
     status_placeholder = st.empty()
@@ -169,7 +185,8 @@ def execute_summary_generation_with_ui(input_text: str, additional_info: str,
     return result
 
 
-def display_progress_with_timer(thread: threading.Thread, placeholder: st.empty,
+def display_progress_with_timer(thread: threading.Thread,
+                                placeholder: st.empty,
                                 start_time: datetime.datetime) -> None:
     elapsed_time = 0
     with st.spinner("作成中..."):
@@ -180,17 +197,19 @@ def display_progress_with_timer(thread: threading.Thread, placeholder: st.empty,
             placeholder.text(f"⏱️ 経過時間: {elapsed_time}秒")
 
 
-def handle_success_result(result: Dict[str, Any], session_params: Dict[str, Any]) -> None:
+def handle_success_result(result: Dict[str, Any],
+                          session_params: Dict[str, Any]) -> None:
     st.session_state.output_summary = result["output_summary"]
     st.session_state.parsed_summary = result["parsed_summary"]
 
     if result.get("model_switched"):
-        st.info(f"⚠️ 入力テキストが長いため{result['original_model']} から Gemini_Pro に切り替えました")
+        st.info(f"⚠️ 入力テキストが長いため{result['original_model']} からGemini_Proに切り替えました")
 
     save_usage_to_database(result, session_params)
 
 
-def save_usage_to_database(result: Dict[str, Any], session_params: Dict[str, Any]) -> None:
+def save_usage_to_database(result: Dict[str, Any],
+                           session_params: Dict[str, Any]) -> None:
     try:
         db_manager = DatabaseManager.get_instance()
         now_jst = datetime.datetime.now().astimezone(JST)
@@ -213,7 +232,7 @@ def save_usage_to_database(result: Dict[str, Any], session_params: Dict[str, Any
                 (date, app_type, document_types, model_detail, department, doctor,
                  input_tokens, output_tokens, total_tokens, processing_time)
                 VALUES (:date, :app_type, :document_types, :model_detail, :department, :doctor,
-                        :input_tokens, :output_tokens, :total_tokens, :processing_time) \
+                        :input_tokens, :output_tokens, :total_tokens, :processing_time)
                 """
 
         db_manager.execute_query(query, usage_data, fetch=False)
@@ -222,26 +241,31 @@ def save_usage_to_database(result: Dict[str, Any], session_params: Dict[str, Any
         st.warning(f"データベース保存中にエラーが発生しました: {str(db_error)}")
 
 
-def normalize_selection_params(department: str, document_type: str) -> Tuple[str, str]:
+def normalize_selection_params(department: str,
+                               document_type: str) -> Tuple[str, str]:
     normalized_dept = department if department in DEFAULT_DEPARTMENT else "default"
     normalized_doc_type = document_type if document_type in DOCUMENT_TYPES else DOCUMENT_TYPES[0]
     return normalized_dept, normalized_doc_type
 
 
-def determine_final_model(department: str, document_type: str, doctor: str,
-                          selected_model: str, model_explicitly_selected: bool,
-                          input_text: str, additional_info: str) -> Tuple[str, bool, str]:
+def determine_final_model(department: str,
+                          document_type: str,
+                          doctor: str,
+                          selected_model: str,
+                          model_explicitly_selected: bool,
+                          input_text: str,
+                          additional_info: str) -> Tuple[str, bool, str]:
     prompt_data = get_prompt(department, document_type, doctor)
     prompt_selected_model = prompt_data.get("selected_model") if prompt_data else None
 
     if prompt_selected_model and not model_explicitly_selected:
         selected_model = prompt_selected_model
 
-    estimated_tokens = len(input_text) + len(additional_info or "")
+    total_characters = len(input_text) + len(additional_info or "")
     original_model = selected_model
     model_switched = False
 
-    if selected_model == "Claude" and estimated_tokens > MAX_TOKEN_THRESHOLD:
+    if selected_model == "Claude" and total_characters > MAX_CHARACTER_THRESHOLD:
         if GEMINI_CREDENTIALS and GEMINI_MODEL:
             selected_model = "Gemini_Pro"
             model_switched = True
