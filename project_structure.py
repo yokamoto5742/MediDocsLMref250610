@@ -85,7 +85,7 @@ class ProjectStructureGenerator:
                     def sort_key(x):
                         is_file = x.is_file()
                         is_important = x.name in self.important_files
-                        return (is_file, not is_important, x.name.lower())
+                        return is_file, not is_important, x.name.lower()
 
                     children.sort(key=sort_key)
 

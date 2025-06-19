@@ -1,3 +1,5 @@
+import os
+
 from utils.config import APP_TYPE
 
 MESSAGES = {

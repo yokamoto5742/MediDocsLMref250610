@@ -6,7 +6,8 @@ from sqlalchemy.pool import QueuePool
 
 from utils.config import (
     POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER,
-    POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_SSL
+    POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_SSL,
+    DB_POOL_SIZE, DB_MAX_OVERFLOW, DB_POOL_TIMEOUT, DB_POOL_RECYCLE
 )
 from utils.exceptions import DatabaseError
 
@@ -57,10 +58,10 @@ class DatabaseManager:
                 connection_string,
                 poolclass=QueuePool,
                 pool_pre_ping=True,
-                pool_size=5,
-                max_overflow=10,
-                pool_timeout=30,
-                pool_recycle=3600
+                pool_size=DB_POOL_SIZE,
+                max_overflow=DB_MAX_OVERFLOW,
+                pool_timeout=DB_POOL_TIMEOUT,
+                pool_recycle=DB_POOL_RECYCLE
             )
 
             DatabaseManager._session_factory = sessionmaker(bind=DatabaseManager._engine)

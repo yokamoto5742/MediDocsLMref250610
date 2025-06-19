@@ -72,20 +72,11 @@ CLAUDE_MODEL=claude-3-5-sonnet-20241022
 GEMINI_CREDENTIALS=your_gemini_api_key
 GEMINI_MODEL=gemini-2.0-flash-thinking-exp
 GEMINI_FLASH_MODEL=gemini-1.5-flash
-GEMINI_THINKING_BUDGET=10000
 
 # トークン制限設定
 MAX_INPUT_TOKENS=200000
 MIN_INPUT_TOKENS=100
 MAX_TOKEN_THRESHOLD=40000
-```
-
-### 5. データベースの初期化
-```bash
-# Alembicマイグレーション（オプション）
-alembic upgrade head
-
-# または自動初期化（アプリ起動時に実行）
 ```
 
 ## 使用方法
@@ -195,11 +186,7 @@ DEPARTMENT_DOCTORS_MAPPING = {
 - `MAX_TOKEN_THRESHOLD`の値を調整
 - Gemini APIを有効にして自動切り替えを利用
 
-### ログ確認
-アプリケーションのログはコンソールに出力されます。エラーの詳細は実行時のログを確認してください。
-
 ### ライセンス
-
 このプロジェクトは[Apache License 2.0](LICENSE)のもとで公開されています。
 
 ### 免責事項
