@@ -10,6 +10,6 @@ def load_environment_variables():
 
     if os.path.exists(env_path):
         load_dotenv(env_path)
-        print("環境変数を.envファイルから読み込みました")
+        print(".envファイルを読み込みました")
     else:
-        print("警告: .envファイルが見つかりません。システム環境変数が設定されていることを確認してください。")
+        print("警告: .envファイルが見つかりません。")

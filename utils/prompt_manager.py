@@ -29,10 +29,10 @@ def update_document(collection, query_dict, update_data):
         if "department" in query_dict:
             query = """
                     UPDATE prompts
-                    SET name       = :name, \
-                        content    = :content, \
+                    SET name       = :name,
+                        content    = :content,
                         updated_at = :updated_at
-                    WHERE department = :department \
+                    WHERE department = :department
                     """
             params = {
                 "name": update_data.get("name"),
@@ -80,7 +80,10 @@ def get_all_prompts():
         raise DatabaseError(f"プロンプト一覧の取得に失敗しました: {str(e)}")
 
 
-def create_or_update_prompt(department, document_type, doctor, content, selected_model=None):
+def create_or_update_prompt(department,
+                            document_type,
+                            doctor, content,
+                            selected_model=None):
     try:
         if not department or not document_type or not doctor or not content:
             return False, "すべての項目を入力してください"
@@ -97,10 +100,10 @@ def create_or_update_prompt(department, document_type, doctor, content, selected
         if existing:
             update_query = """
                            UPDATE prompts
-                           SET content       = :content, \
-                               selected_model = :selected_model, \
+                           SET content       = :content,
+                               selected_model = :selected_model,
                                updated_at = CURRENT_TIMESTAMP
-                           WHERE department = :department AND document_type = :document_type AND doctor = :doctor \
+                           WHERE department = :department AND document_type = :document_type AND doctor = :doctor
                            """
 
             prompt_collection.execute_query(update_query, {
@@ -229,7 +232,9 @@ def initialize_default_prompt():
         raise DatabaseError(f"デフォルトプロンプトの初期化に失敗しました: {str(e)}")
 
 
-def get_prompt(department="default", document_type=DEFAULT_DOCUMENT_TYPE, doctor="default"):
+def get_prompt(department="default",
+               document_type=DEFAULT_DOCUMENT_TYPE,
+               doctor="default"):
     try:
         prompt_collection = get_prompt_collection()
         query = "SELECT * FROM prompts WHERE department = :department AND document_type = :document_type AND doctor = :doctor"
@@ -264,11 +269,11 @@ def initialize_database():
             for doctor in doctors:
                 for doc_type in document_types:
                     check_query = """
-                                  SELECT * \
+                                  SELECT *
                                   FROM prompts
                                   WHERE department = :department
                                     AND document_type = :document_type
-                                    AND doctor = :doctor \
+                                    AND doctor = :doctor
                                   """
 
                     existing = prompt_collection.execute_query(check_query, {
