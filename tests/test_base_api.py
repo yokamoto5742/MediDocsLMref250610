@@ -60,7 +60,7 @@ class TestBaseAPIClient:
         )
 
         expected_prompt = (
-            "デフォルトプロンプト: 以下の医療文書を要約してください。\n\n"
+            "デフォルトプロンプト: 以下の医療文書を要約してください。\n"
             f"【カルテ情報】\n{sample_medical_text}\n"
             "【追加情報】追加情報テスト"
         )
@@ -90,7 +90,7 @@ class TestBaseAPIClient:
         )
 
         expected_prompt = (
-            f"{mock_prompt_data['content']}\n\n"
+            f"{mock_prompt_data['content']}\n"
             f"【カルテ情報】\n{sample_medical_text}\n"
             "【追加情報】"
         )

@@ -161,7 +161,7 @@ class TestEnvironmentVariables:
         env_vars = {
             'MAX_INPUT_TOKENS': '300000',
             'MIN_INPUT_TOKENS': '200',
-            'MAX_TOKEN_THRESHOLD': '50000'
+            'MAX_CHARACTER_THRESHOLD ': '40000'
         }
         
         with patch.dict(os.environ, env_vars):
@@ -171,4 +171,4 @@ class TestEnvironmentVariables:
             
             assert utils.config.MAX_INPUT_TOKENS == 300000
             assert utils.config.MIN_INPUT_TOKENS == 200
-            assert utils.config.MAX_TOKEN_THRESHOLD == 50000
+            assert utils.config.MAX_CHARACTER_THRESHOLD  == 40000

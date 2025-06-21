@@ -79,7 +79,7 @@ class TestClaudeAPIClient:
         assert result == ("生成されたサマリーテキスト", 150, 75)
         mock_anthropic_client.messages.create.assert_called_once_with(
             model="claude-3-sonnet",
-            max_tokens=5000,
+            max_tokens=6000,
             messages=[
                 {"role": "user", "content": "テストプロンプト"}
             ]
@@ -132,21 +132,21 @@ class TestClaudeAPIClient:
         """統合テスト: generate_summaryメソッド"""
         client = ClaudeAPIClient()
         sample_medical_text = "患者情報のテストデータ"
-        
+
         # 初期化のモック
         with patch.object(client, 'initialize', return_value=True):
             # プロンプト作成のモック
             with patch.object(client, 'create_summary_prompt') as mock_create_prompt:
                 mock_create_prompt.return_value = "作成されたプロンプト"
-                
+
                 # モデル名取得のモック
                 with patch.object(client, 'get_model_name') as mock_get_model:
                     mock_get_model.return_value = "claude-3-haiku"
-                    
+
                     # コンテンツ生成のモック
                     with patch.object(client, '_generate_content') as mock_generate:
                         mock_generate.return_value = ("統合テスト結果", 200, 100)
-                        
+
                         result = client.generate_summary(
                             medical_text=sample_medical_text,
                             additional_info="統合テスト追加情報",
@@ -154,12 +154,14 @@ class TestClaudeAPIClient:
                             document_type="統合テスト書類",
                             doctor="統合テスト医師"
                         )
-                        
+
                         # 検証
                         assert result == ("統合テスト結果", 200, 100)
                         mock_create_prompt.assert_called_once_with(
                             sample_medical_text,
                             "統合テスト追加情報",
+                            "",  # referral_purpose (デフォルト値)
+                            "",  # current_prescription (デフォルト値)
                             "統合テスト科",
                             "統合テスト書類",
                             "統合テスト医師"
