@@ -217,8 +217,8 @@ class TestOpenAIAPIClient:
                         mock_create_prompt.assert_called_once_with(
                             sample_medical_text,
                             "OpenAI追加情報",
-                            '',
-                            '',
+                            "",  # referral_purpose (デフォルト値)
+                            "",  # current_prescription (デフォルト値)
                             "OpenAI科",
                             "OpenAI書類",
                             "OpenAI医師"

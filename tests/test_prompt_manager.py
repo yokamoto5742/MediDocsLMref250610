@@ -232,13 +232,14 @@ class TestDeletePrompt:
             assert message == "プロンプトを削除しました"
             mock_session.commit.assert_called_once()
             mock_session.close.assert_called_once()
-    
+
     def test_delete_prompt_default_protection(self):
         """デフォルトプロンプトの削除保護テスト"""
-        success, message = delete_prompt("default", "主治医意見書", "default")
-        
-        assert success is False
-        assert message == "デフォルトプロンプトは削除できません"
+        with patch('utils.prompt_manager.DEFAULT_DOCUMENT_TYPE', '主治医意見書'):
+            success, message = delete_prompt("default", "主治医意見書", "default")
+
+            assert success is False
+            assert message == "デフォルトプロンプトは削除できません"
     
     def test_delete_prompt_not_found(self, mock_database_manager):
         """存在しないプロンプトの削除テスト"""
