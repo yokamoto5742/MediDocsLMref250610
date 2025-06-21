@@ -14,7 +14,6 @@ def clear_inputs():
     st.session_state.parsed_summary = {}
     st.session_state.summary_generation_time = None
     st.session_state.clear_input = True
-
     st.session_state.selected_document_type = DOCUMENT_TYPES[0]
     st.session_state.referral_purpose = DOCUMENT_TYPE_TO_PURPOSE_MAPPING.get(DOCUMENT_TYPES[0], "")
 
@@ -43,14 +42,14 @@ def render_input_section():
     input_text = st.text_area(
         "カルテ記載",
         height=70,
-        placeholder="ここを右クリックしてテキストを貼り付けてください...",
+        placeholder="カルテテキストを貼り付けてください...",
         key="input_text"
     )
 
     additional_info = st.text_area(
         "追加情報",
         height=70,
-        placeholder="追加情報があれば入力してください...",
+        placeholder="追加情報を入力してください...",
         key="additional_info"
     )
 

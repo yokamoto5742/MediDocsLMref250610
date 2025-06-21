@@ -47,6 +47,8 @@ MESSAGES = {
     "PROMPT_CREATED": "プロンプトを新規作成しました",
     "PROMPT_DELETED": "プロンプトを削除しました",
 
+    "NO_DATA_FOUND": "指定期間のデータがありません",
+
     "FIELD_REQUIRED": "すべての項目を入力してください",
     "NO_INPUT": "⚠️ カルテ情報を入力してください",
     "INPUT_TOO_SHORT": "⚠️ 入力テキストが短すぎます",

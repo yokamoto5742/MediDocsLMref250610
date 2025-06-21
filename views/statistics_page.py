@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from database.db import DatabaseManager
-from utils.constants import DOCUMENT_TYPE_OPTIONS
+from utils.constants import DOCUMENT_TYPE_OPTIONS, MESSAGES
 from utils.error_handlers import handle_error
 from ui_components.navigation import change_page
 
@@ -88,7 +88,7 @@ def usage_statistics_ui():
     total_summary = db_manager.execute_query(total_query, query_params)
 
     if not total_summary or total_summary[0]["count"] == 0:
-        st.info("指定期間のデータがありません")
+        st.info(MESSAGES["NO_DATA_FOUND"])
         return
 
     dept_query = f"""
@@ -147,7 +147,7 @@ def usage_statistics_ui():
     detail_data = []
     for record in records:
         model_detail = str(record.get("model_detail", "")).lower()
-        model_info = "Gemini_Pro" # デフォルト値
+        model_info = "Gemini_Pro"
 
         for model_name, config in MODEL_MAPPING.items():
             pattern = config["pattern"]

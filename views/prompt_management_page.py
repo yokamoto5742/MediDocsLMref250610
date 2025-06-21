@@ -147,8 +147,13 @@ def prompt_management_ui():
             if prompt_model:
                 st.session_state.document_model_mapping[selected_doc_type] = prompt_model
 
-            success, message = create_or_update_prompt(selected_dept, selected_doc_type, selected_doctor,
-                                                       prompt_content, prompt_model)
+            success, message = create_or_update_prompt(
+                selected_dept,
+                selected_doc_type,
+                selected_doctor,
+                prompt_content, prompt_model
+            )
+
             if success:
                 st.success(message)
             else:
