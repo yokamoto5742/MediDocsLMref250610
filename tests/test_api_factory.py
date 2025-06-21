@@ -106,6 +106,8 @@ class TestAPIFactory:
         mock_client.generate_summary.assert_called_once_with(
             sample_medical_text,
             sample_additional_info,
+            "",  # referral_purpose (デフォルト値)
+            "",  # current_prescription (デフォルト値)
             "内科",
             "診断書",
             "田中医師",
