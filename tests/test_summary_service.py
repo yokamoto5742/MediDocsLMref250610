@@ -196,7 +196,7 @@ class TestDetermineFinalModel:
     """最終モデル決定のテストクラス"""
 
     @patch('services.summary_service.get_prompt')
-    @patch('services.summary_service.MAX_TOKEN_THRESHOLD', 1000)
+    @patch('services.summary_service.MAX_CHARACTER_THRESHOLD', 1000)
     def test_determine_final_model_no_prompt_model(self, mock_get_prompt):
         """プロンプトでモデルが指定されていない場合のテスト"""
         mock_get_prompt.return_value = {'selected_model': None}
@@ -210,7 +210,7 @@ class TestDetermineFinalModel:
         assert original == 'Claude'
 
     @patch('services.summary_service.get_prompt')
-    @patch('services.summary_service.MAX_TOKEN_THRESHOLD', 1000)
+    @patch('services.summary_service.MAX_CHARACTER_THRESHOLD', 1000)
     def test_determine_final_model_with_prompt_model(self, mock_get_prompt):
         """プロンプトでモデルが指定されている場合のテスト"""
         mock_get_prompt.return_value = {'selected_model': 'Gemini_Pro'}
@@ -224,7 +224,7 @@ class TestDetermineFinalModel:
         assert original == 'Gemini_Pro'
 
     @patch('services.summary_service.get_prompt')
-    @patch('services.summary_service.MAX_TOKEN_THRESHOLD', 10)
+    @patch('services.summary_service.MAX_CHARACTER_THRESHOLD', 10)
     @patch('services.summary_service.GEMINI_CREDENTIALS', 'test_creds')
     @patch('services.summary_service.GEMINI_MODEL', 'gemini-pro')
     def test_determine_final_model_token_threshold_exceeded(self, mock_get_prompt):
@@ -240,7 +240,7 @@ class TestDetermineFinalModel:
         assert original == 'Claude'
 
     @patch('services.summary_service.get_prompt')
-    @patch('services.summary_service.MAX_TOKEN_THRESHOLD', 10)
+    @patch('services.summary_service.MAX_CHARACTER_THRESHOLD', 10)
     @patch('services.summary_service.GEMINI_CREDENTIALS', None)
     def test_determine_final_model_token_threshold_exceeded_no_gemini(self, mock_get_prompt):
         """トークン数制限を超えたがGeminiが利用できない場合のテスト"""
