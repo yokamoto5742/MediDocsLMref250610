@@ -171,15 +171,15 @@ class TestGeminiAPIClient:
             # プロンプト作成のモック
             with patch.object(client, 'create_summary_prompt') as mock_create_prompt:
                 mock_create_prompt.return_value = "Gemini用プロンプト"
-                
+
                 # モデル名取得のモック
                 with patch.object(client, 'get_model_name') as mock_get_model:
                     mock_get_model.return_value = "gemini-1.0-pro"
-                    
+
                     # コンテンツ生成のモック
                     with patch.object(client, '_generate_content') as mock_generate:
                         mock_generate.return_value = ("Gemini統合テスト結果", 300, 150)
-                        
+
                         result = client.generate_summary(
                             medical_text=sample_medical_text,
                             additional_info="Gemini追加情報",
@@ -187,12 +187,14 @@ class TestGeminiAPIClient:
                             document_type="Gemini書類",
                             doctor="Gemini医師"
                         )
-                        
+
                         # 検証
                         assert result == ("Gemini統合テスト結果", 300, 150)
                         mock_create_prompt.assert_called_once_with(
                             sample_medical_text,
                             "Gemini追加情報",
+                            "",  # referral_purpose (デフォルト値)
+                            "",  # current_prescription (デフォルト値)
                             "Gemini科",
                             "Gemini書類",
                             "Gemini医師"

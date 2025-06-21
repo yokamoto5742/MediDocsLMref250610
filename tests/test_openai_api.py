@@ -88,7 +88,7 @@ class TestOpenAIAPIClient:
                 {"role": "system", "content": "あなたは経験豊富な医療文書作成の専門家です。"},
                 {"role": "user", "content": "OpenAIテストプロンプト"}
             ],
-            max_tokens=10000,
+            max_tokens=6000,
         )
 
     def test_generate_content_empty_choices(self):
@@ -217,6 +217,8 @@ class TestOpenAIAPIClient:
                         mock_create_prompt.assert_called_once_with(
                             sample_medical_text,
                             "OpenAI追加情報",
+                            '',
+                            '',
                             "OpenAI科",
                             "OpenAI書類",
                             "OpenAI医師"
