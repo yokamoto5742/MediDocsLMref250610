@@ -33,20 +33,15 @@ def parse_output_summary(summary_text):
 
         found_section = False
 
-        # セクションヘッダーの検出（より厳密に）
         for section in DEFAULT_SECTION_NAMES:
-            # 行がセクション名で始まるか、完全一致の場合
             if line == section or (line.startswith(section) and len(line.replace(section, "").strip()) < 100):
                 current_section = section
-                # セクションヘッダー行からセクション名を除去した残りのコンテンツ
                 content = line.replace(section, "").strip()
-                if content:  # 同じ行にコンテンツがある場合
+                if content:
                     sections[current_section] = content
-                # セクションヘッダーのみの場合は何もしない（既存内容を保持）
                 found_section = True
                 break
 
-        # エイリアスの検出
         if not found_section:
             for alias, target_section in section_aliases.items():
                 if line.startswith(alias) or line == alias:
@@ -57,7 +52,6 @@ def parse_output_summary(summary_text):
                     found_section = True
                     break
 
-        # 現在のセクションにコンテンツを追加（セクションヘッダー行でない場合）
         if current_section and line and not found_section:
             if sections[current_section]:
                 sections[current_section] += "\n" + line
