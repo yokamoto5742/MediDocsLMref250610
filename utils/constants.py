@@ -12,13 +12,14 @@ DEPARTMENT_DOCTORS_MAPPING = {
 }
 
 DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
-DOCUMENT_TYPES = ["診療情報提供書", "他院への紹介", "返書"]
-DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書", "他院への紹介", "返書"]
+DOCUMENT_TYPES = ["他院への紹介", "紹介元への逆紹介", "返書", "最終返書"]
+DOCUMENT_TYPE_OPTIONS = ["すべて", "他院への紹介", "紹介元への逆紹介", "返書", "最終返書"]
 
 DOCUMENT_TYPE_TO_PURPOSE_MAPPING = {
-    "診療情報提供書": "精査加療依頼",
-    "他院への紹介": "継続治療依頼",
-    "返書": "受診報告"
+    "他院への紹介": "精査加療依頼",
+    "紹介元への逆紹介": "継続治療依頼",
+    "返書": "受診報告",
+    "最終返書": "治療経過報告",
 }
 
 DEFAULT_SECTION_NAMES = [
