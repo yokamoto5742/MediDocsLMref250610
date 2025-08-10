@@ -7,7 +7,7 @@ DEFAULT_DOCTOR = ["default"]
 
 DEPARTMENT_DOCTORS_MAPPING = {
     "default": ["default","医師共通"],
-    "眼科": ["default", "橋本義弘", "植田芳樹"],
+    "眼科": ["default", "橋本義弘"],
 }
 
 DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
