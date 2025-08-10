@@ -2,13 +2,12 @@ import os
 
 from utils.config import APP_TYPE
 
-DEFAULT_DEPARTMENT = ["default","眼科","整形外科"]
+DEFAULT_DEPARTMENT = ["default","眼科"]
 DEFAULT_DOCTOR = ["default"]
 
 DEPARTMENT_DOCTORS_MAPPING = {
     "default": ["default","医師共通"],
     "眼科": ["default", "橋本義弘", "植田芳樹"],
-    "整形外科": ["default", "駒井理", "太田悟"],
 }
 
 DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
