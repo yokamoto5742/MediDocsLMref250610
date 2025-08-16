@@ -2,23 +2,23 @@ import os
 
 from utils.config import APP_TYPE
 
-DEFAULT_DEPARTMENT = ["default","眼科","整形外科"]
+DEFAULT_DEPARTMENT = ["default","眼科"]
 DEFAULT_DOCTOR = ["default"]
 
 DEPARTMENT_DOCTORS_MAPPING = {
     "default": ["default","医師共通"],
-    "眼科": ["default", "橋本義弘", "植田芳樹"],
-    "整形外科": ["default", "駒井理", "太田悟"],
+    "眼科": ["default", "橋本義弘"],
 }
 
 DEFAULT_DOCUMENT_TYPE = "診療情報提供書"
-DOCUMENT_TYPES = ["診療情報提供書", "他院への紹介", "返書"]
-DOCUMENT_TYPE_OPTIONS = ["すべて", "診療情報提供書", "他院への紹介", "返書"]
+DOCUMENT_TYPES = ["他院への紹介", "紹介元への逆紹介", "返書", "最終返書"]
+DOCUMENT_TYPE_OPTIONS = ["すべて", "他院への紹介", "紹介元への逆紹介", "返書", "最終返書"]
 
 DOCUMENT_TYPE_TO_PURPOSE_MAPPING = {
-    "診療情報提供書": "精査加療依頼",
-    "他院への紹介": "継続治療依頼",
-    "返書": "受診報告"
+    "他院への紹介": "精査加療依頼",
+    "紹介元への逆紹介": "継続治療依頼",
+    "返書": "受診報告",
+    "最終返書": "治療経過報告",
 }
 
 DEFAULT_SECTION_NAMES = [
