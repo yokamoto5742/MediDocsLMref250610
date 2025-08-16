@@ -11,9 +11,9 @@ from database.db import DatabaseManager
 from external_service.api_factory import generate_summary
 from utils.config import (CLAUDE_API_KEY, CLAUDE_MODEL,
                           GEMINI_CREDENTIALS, GEMINI_FLASH_MODEL, GEMINI_MODEL,
-                          MAX_INPUT_TOKENS, MIN_INPUT_TOKENS, OPENAI_API_KEY,
-                          OPENAI_MODEL, MAX_CHARACTER_THRESHOLD)
-from utils.constants import APP_TYPE, MESSAGES, DEFAULT_DEPARTMENT, DEFAULT_DOCUMENT_TYPE,DOCUMENT_TYPES
+                          MAX_INPUT_TOKENS, MIN_INPUT_TOKENS,
+                          MAX_CHARACTER_THRESHOLD)
+from utils.constants import APP_TYPE, MESSAGES, DEFAULT_DEPARTMENT, DEFAULT_DOCUMENT_TYPE, DOCUMENT_TYPES
 from utils.error_handlers import handle_error
 from utils.exceptions import APIError
 from utils.prompt_manager import get_prompt
@@ -78,12 +78,10 @@ def generate_summary_task(input_text: str,
         })
 
     except Exception as e:
-        if "openai" in str(e).lower():
-            error_str = str(e)
-            if "insufficient_quota" in error_str or "exceeded your current quota" in error_str:
-                result_queue.put({"success": False, "error": APIError(MESSAGES["OPENAI_API_QUOTA_EXCEEDED"])})
-                return
-        result_queue.put({"success": False, "error": e})
+        result_queue.put({
+            "success": False,
+            "error": str(e)
+        })
 
 
 @handle_error
@@ -280,7 +278,6 @@ def get_provider_and_model(selected_model: str) -> Tuple[str, str]:
         "Claude": ("claude", CLAUDE_MODEL),
         "Gemini_Pro": ("gemini", GEMINI_MODEL),
         "Gemini_Flash": ("gemini", GEMINI_FLASH_MODEL),
-        "GPT4.1": ("openai", OPENAI_MODEL)
     }
 
     if selected_model not in provider_mapping:

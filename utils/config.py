@@ -52,9 +52,6 @@ GEMINI_THINKING_BUDGET = int(os.environ.get("GEMINI_THINKING_BUDGET")) if os.env
 CLAUDE_API_KEY = os.environ.get("CLAUDE_API_KEY")
 CLAUDE_MODEL = os.environ.get("CLAUDE_MODEL")
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-OPENAI_MODEL = os.environ.get("OPENAI_MODEL")
-
 SELECTED_AI_MODEL = os.environ.get("SELECTED_AI_MODEL", "gemini")
 MAX_INPUT_TOKENS = int(os.environ.get("MAX_INPUT_TOKENS", "200000"))
 MIN_INPUT_TOKENS = int(os.environ.get("MIN_INPUT_TOKENS", "100"))

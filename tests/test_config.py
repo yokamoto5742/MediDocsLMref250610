@@ -136,8 +136,6 @@ class TestEnvironmentVariables:
             'GEMINI_MODEL': 'gemini-pro',
             'CLAUDE_API_KEY': 'test_claude_key',
             'CLAUDE_MODEL': 'claude-3',
-            'OPENAI_API_KEY': 'test_openai_key',
-            'OPENAI_MODEL': 'gpt-4',
             'SELECTED_AI_MODEL': 'claude',
             'GEMINI_THINKING_BUDGET': '1000'
         }
@@ -151,8 +149,6 @@ class TestEnvironmentVariables:
             assert utils.config.GEMINI_MODEL == 'gemini-pro'
             assert utils.config.CLAUDE_API_KEY == 'test_claude_key'
             assert utils.config.CLAUDE_MODEL == 'claude-3'
-            assert utils.config.OPENAI_API_KEY == 'test_openai_key'
-            assert utils.config.OPENAI_MODEL == 'gpt-4'
             assert utils.config.SELECTED_AI_MODEL == 'claude'
             assert utils.config.GEMINI_THINKING_BUDGET == 1000
     
