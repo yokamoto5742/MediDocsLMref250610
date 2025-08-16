@@ -155,7 +155,8 @@ def prompt_management_ui():
             )
 
             if success:
-                st.success(message)
+                st.session_state.success_message = message
+                st.rerun()
             else:
                 raise AppError(message)
 
