@@ -217,7 +217,7 @@ DOCUMENT_TYPE_TO_PURPOSE_MAPPING = {
 
 #### トークン数超過エラー
 - 入力テキストの長さを調整
-- `MAX_CHARACTER_THRESHOLD`の値を調整
+- `MAX_TOKEN_THRESHOLD`の値を調整
 - Gemini APIを有効にして自動切り替えを利用
 
 ### パフォーマンス最適化
