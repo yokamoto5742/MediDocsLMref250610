@@ -106,14 +106,14 @@ def process_summary(input_text: str,
         if result["success"]:
             handle_success_result(result, session_params)
         else:
-            raise result['error']
+            raise APIError(result['error'])
 
     except Exception as e:
         raise APIError(f"作成中にエラーが発生しました: {str(e)}")
 
 
 def validate_api_credentials() -> None:
-    if not any([GEMINI_CREDENTIALS, CLAUDE_API_KEY, OPENAI_API_KEY]):
+    if not any([GEMINI_CREDENTIALS, CLAUDE_API_KEY]):
         raise APIError(MESSAGES["NO_API_CREDENTIALS"])
 
 
@@ -290,7 +290,6 @@ def validate_api_credentials_for_provider(provider: str) -> None:
     credentials_check = {
         "claude": CLAUDE_API_KEY,
         "gemini": GEMINI_CREDENTIALS,
-        "openai": OPENAI_API_KEY
     }
 
     if not credentials_check.get(provider):
