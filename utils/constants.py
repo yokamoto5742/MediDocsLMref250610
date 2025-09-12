@@ -2,11 +2,11 @@ import os
 
 from utils.config import APP_TYPE
 
-DEFAULT_DEPARTMENT = ["default","眼科"]
+DEFAULT_DEPARTMENT = ["default", "眼科"]
 DEFAULT_DOCTOR = ["default"]
 
 DEPARTMENT_DOCTORS_MAPPING = {
-    "default": ["default","医師共通"],
+    "default": ["default", "医師共通"],
     "眼科": ["default", "橋本義弘"],
 }
 
@@ -55,9 +55,18 @@ MESSAGES = {
     "INPUT_TOO_LONG": "⚠️ 入力テキストが長すぎます",
     "TOKEN_THRESHOLD_EXCEEDED": "⚠️ 入力テキストが長いため{original_model} から Gemini_Pro に切り替えます",
     "TOKEN_THRESHOLD_EXCEEDED_NO_GEMINI": "⚠️ Gemini APIの認証情報が設定されていないため処理できません。",
+
+    # API認証関連のメッセージ
     "API_CREDENTIALS_MISSING": "⚠️ Gemini APIの認証情報が設定されていません。環境変数を確認してください。",
     "CLAUDE_API_CREDENTIALS_MISSING": "⚠️ Claude APIの認証情報が設定されていません。環境変数を確認してください。",
     "NO_API_CREDENTIALS": "⚠️ 使用可能なAI APIの認証情報が設定されていません。環境変数を確認してください。",
+    "AWS_CREDENTIALS_MISSING": "⚠️ AWS認証情報が設定されていません。環境変数を確認してください。",
+    "ANTHROPIC_MODEL_MISSING": "⚠️ ANTHROPIC_MODELが設定されていません。環境変数を確認してください。",
+    "BEDROCK_INIT_ERROR": "Amazon Bedrock Claude API初期化エラー: {error}",
+    "BEDROCK_API_ERROR": "Amazon Bedrock Claude API呼び出しエラー: {error}",
+
+    "EMPTY_RESPONSE": "レスポンスが空です",
+
     "COPY_INSTRUCTION": "💡 テキストエリアの右上にマウスを合わせて左クリックでコピーできます",
     "PROCESSING_TIME": "⏱️ 処理時間: {processing_time:.0f}秒",
 }
