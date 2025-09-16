@@ -65,6 +65,12 @@ MESSAGES = {
     "BEDROCK_INIT_ERROR": "Amazon Bedrock Claude API初期化エラー: {error}",
     "BEDROCK_API_ERROR": "Amazon Bedrock Claude API呼び出しエラー: {error}",
 
+    # Vertex AI関連のエラーメッセージ
+    "GOOGLE_PROJECT_ID_MISSING": "⚠️ GOOGLE_PROJECT_ID環境変数が設定されていません。",
+    "GOOGLE_LOCATION_MISSING": "⚠️ GOOGLE_LOCATION環境変数が設定されていません。",
+    "VERTEX_AI_INIT_ERROR": "Vertex AI初期化エラー: {error}",
+    "VERTEX_AI_API_ERROR": "Vertex AI API呼び出しエラー: {error}",
+
     "EMPTY_RESPONSE": "レスポンスが空です",
 
     "COPY_INSTRUCTION": "💡 テキストエリアの右上にマウスを合わせて左クリックでコピーできます",
