@@ -235,7 +235,7 @@ class TestDeletePrompt:
     
     def test_delete_prompt_default_protection(self):
         """デフォルトプロンプトの削除保護テスト"""
-        success, message = delete_prompt("default", "主治医意見書", "default")
+        success, message = delete_prompt("default", "診療情報提供書", "default")
         
         assert success is False
         assert message == "デフォルトプロンプトは削除できません"

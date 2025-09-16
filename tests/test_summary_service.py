@@ -310,11 +310,10 @@ class TestGenerateSummaryTask:
 
         result_queue = queue.Queue()
 
-        from utils.exceptions import APIError
-        with pytest.raises(APIError):
-            generate_summary_task(
-                TEST_INPUT_TEXT, '内科', 'Claude', result_queue
-            )
+        # 関数は例外を投げるのではなく、結果をキューに入れる
+        generate_summary_task(
+            TEST_INPUT_TEXT, '内科', 'Claude', result_queue
+        )
 
         result = result_queue.get()
 
