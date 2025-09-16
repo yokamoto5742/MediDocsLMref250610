@@ -1,0 +1,105 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## House Rules:
+- 文章ではなくパッチの差分を返すこと。Return patch diffs, not prose.
+- 不明な点がある場合は、トレードオフを明記した2つの選択肢を提案すること（80語以内）。
+- 変更範囲は最小限に抑えること
+- Pythonコードのimport文は以下の適切な順序に並べ替えてください。
+標準ライブラリ
+サードパーティライブラリ
+カスタムモジュール 
+それぞれアルファベット順に並べます。importが先でfromは後です。
+
+## Automatic Notifications (Hooks)
+自動通知は`.claude/settings.local.json` で設定済：
+
+- **Stop Hook**: ユーザーがClaude Codeを停止した時に「作業が完了しました」と通知
+- **SessionEnd Hook**: セッション終了時に「Claude Code セッションが終了しました」と通知
+
+## Development Commands
+
+### Running the Application
+```bash
+streamlit run app.py
+```
+Application runs on http://localhost:8501
+
+### Testing
+```bash
+# Run all tests
+python -m pytest tests/ -v --tb=short
+
+# Run tests with coverage
+python -m pytest tests/ -v --tb=short --disable-warnings
+
+# Run specific test file
+python -m pytest tests/services/test_summary_service.py -v
+```
+
+### Dependencies
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Update requirements (if using uv)
+uv add <package_name>
+```
+
+## Architecture Overview
+
+### Core Structure
+This is a **Streamlit-based medical document generation app** that uses multiple AI APIs (Claude, Gemini) to generate medical referral documents from patient chart data.
+
+**Key architectural patterns:**
+- **Factory Pattern**: `external_service/api_factory.py` manages AI provider instantiation
+- **Service Layer**: `services/summary_service.py` handles business logic for document generation
+- **Repository Pattern**: `database/` contains models and data access logic
+- **View Components**: Streamlit pages in `views/` with reusable UI components in `ui_components/`
+
+### Data Flow
+1. **Input**: User enters chart data, additional info, and selects AI model in Streamlit UI
+2. **Processing**: `SummaryService` coordinates with API clients via factory pattern
+3. **AI Integration**: Auto-switches between models based on input length (Claude → Gemini for large inputs)
+4. **Output**: Generated document parsed into structured sections (main disease, treatment history, etc.)
+5. **Storage**: Usage statistics and prompts stored in PostgreSQL
+
+### External Dependencies
+- **AI APIs**: Claude (Anthropic), Gemini (Google) - at least one required
+- **Database**: PostgreSQL for prompts, usage stats, and app settings
+- **Web Framework**: Streamlit for the UI
+
+### Configuration Management
+- **Environment**: `.env` file with API keys and database settings
+- **Constants**: `utils/constants.py` for departments, doctors, document types
+- **User Settings**: Saved to database via `ui_components/navigation.py`
+
+### Key Business Logic
+- **Auto Model Switching**: Switches from Claude to Gemini when input exceeds 40,000 characters
+- **Hierarchical Prompts**: Department → Doctor → Document Type specific prompt inheritance
+- **Usage Tracking**: All AI API calls logged with token counts and timing data
+
+### Database Schema
+- `prompts`: Custom prompts by department/doctor/document type
+- `summary_usage`: API usage statistics and timing
+- `app_settings`: User preferences and settings
+
+## Important Implementation Notes
+
+### Adding New AI Providers
+1. Create new client in `external_service/` inheriting from `BaseAPIClient`
+2. Register in `api_factory.py`
+3. Add environment variables and model constants
+
+### Customizing Departments/Doctors
+Edit `utils/constants.py`:
+- `DEFAULT_DEPARTMENT`: Available departments
+- `DEPARTMENT_DOCTORS_MAPPING`: Doctor assignments per department
+- `DOCUMENT_TYPES`: Available document types
+
+### Testing Structure
+Tests are organized by module:
+- `tests/services/`: Business logic tests
+- `tests/utils/`: Utility function tests
+- Use `pytest-mock` for API mocking in tests
