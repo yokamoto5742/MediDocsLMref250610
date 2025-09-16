@@ -47,6 +47,19 @@ pip install -r requirements.txt
 uv add <package_name>
 ```
 
+## Changelog
+
+### 2025-01-16 - Vertex AI Integration
+- **Updated**: `external_service/gemini_api.py` to use Vertex AI API instead of Google AI
+  - Changed client initialization to use `vertexai=True` with project and location parameters
+  - Added environment variable validation for `GOOGLE_PROJECT_ID` and `GOOGLE_LOCATION`
+  - Enhanced error handling with Vertex AI specific error messages
+- **Added**: Vertex AI configuration to `utils/config.py`
+  - `GOOGLE_PROJECT_ID` and `GOOGLE_LOCATION` environment variables
+- **Added**: Vertex AI error messages to `utils/constants.py`
+  - `GOOGLE_PROJECT_ID_MISSING`, `GOOGLE_LOCATION_MISSING`
+  - `VERTEX_AI_INIT_ERROR`, `VERTEX_AI_API_ERROR`
+
 ## Architecture Overview
 
 ### Core Structure
