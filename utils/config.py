@@ -44,7 +44,7 @@ DB_MAX_OVERFLOW = int(os.environ.get("DB_MAX_OVERFLOW", "10"))
 DB_POOL_TIMEOUT = int(os.environ.get("DB_POOL_TIMEOUT", "30"))
 DB_POOL_RECYCLE = int(os.environ.get("DB_POOL_RECYCLE", "3600"))
 
-GEMINI_CREDENTIALS = os.environ.get("GEMINI_CREDENTIALS")
+GOOGLE_CREDENTIALS_JSON = os.environ.get("GOOGLE_CREDENTIALS_JSON")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL")
 GEMINI_FLASH_MODEL = os.environ.get("GEMINI_FLASH_MODEL")
 GEMINI_THINKING_BUDGET = int(os.environ.get("GEMINI_THINKING_BUDGET")) if os.environ.get("GEMINI_THINKING_BUDGET") else None
