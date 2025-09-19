@@ -49,6 +49,20 @@ uv add <package_name>
 
 ## Changelog
 
+### 2025-09-19 - Environment Variable Standardization
+- **Refactored**: Replaced `GEMINI_CREDENTIALS` with `GOOGLE_CREDENTIALS_JSON` across codebase
+  - `utils/config.py`: Updated environment variable definition
+  - `services/summary_service.py`: Updated imports and credential validation
+  - `ui_components/navigation.py`: Updated imports and model availability checks
+  - `scripts/VertexAI_API.py`: Updated to use new credential variable
+- **Updated**: All test files to use new credential variable
+  - `tests/test_summary_service.py`: Updated mock patches
+  - `tests/test_config.py`: Updated test assertions
+  - `tests/conftest.py`: Updated test environment variables
+- **Updated**: Documentation to reflect new credential format
+  - `docs/README.md`: Updated environment variable example
+- **Verified**: All 120 tests pass with new credential system
+
 ### 2025-01-16 - Test Code Fixes & Text Processing Updates
 - **Fixed**: All failing unit tests (120 tests now pass)
 - **Updated**: `utils/text_processor.py` - Enhanced text processing functions
