@@ -46,10 +46,7 @@ DB_POOL_RECYCLE = int(os.environ.get("DB_POOL_RECYCLE", "3600"))
 
 GOOGLE_CREDENTIALS_JSON = os.environ.get("GOOGLE_CREDENTIALS_JSON")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL")
-GEMINI_FLASH_MODEL = os.environ.get("GEMINI_FLASH_MODEL")
-GEMINI_THINKING_BUDGET = int(os.environ.get("GEMINI_THINKING_BUDGET")) if os.environ.get("GEMINI_THINKING_BUDGET") else None
-
-# Vertex AI関連の環境変数
+GEMINI_THINKING_LEVEL = os.environ.get("GEMINI_THINKING_LEVEL", "HIGH").upper()
 GOOGLE_PROJECT_ID = os.environ.get("GOOGLE_PROJECT_ID")
 GOOGLE_LOCATION = os.environ.get("GOOGLE_LOCATION")
 
