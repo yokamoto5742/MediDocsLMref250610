@@ -10,7 +10,7 @@ import streamlit as st
 from database.db import DatabaseManager
 from external_service.api_factory import generate_summary
 from utils.config import (CLAUDE_API_KEY, CLAUDE_MODEL,
-                          GOOGLE_CREDENTIALS_JSON, GEMINI_FLASH_MODEL, GEMINI_MODEL,
+                          GOOGLE_CREDENTIALS_JSON, GEMINI_MODEL,
                           MAX_INPUT_TOKENS, MIN_INPUT_TOKENS,
                           MAX_TOKEN_THRESHOLD)
 from utils.constants import APP_TYPE, MESSAGES, DEFAULT_DEPARTMENT, DEFAULT_DOCUMENT_TYPE, DOCUMENT_TYPES
@@ -277,7 +277,6 @@ def get_provider_and_model(selected_model: str) -> Tuple[str, str]:
     provider_mapping = {
         "Claude": ("claude", CLAUDE_MODEL),
         "Gemini_Pro": ("gemini", GEMINI_MODEL),
-        "Gemini_Flash": ("gemini", GEMINI_FLASH_MODEL),
     }
 
     if selected_model not in provider_mapping:
